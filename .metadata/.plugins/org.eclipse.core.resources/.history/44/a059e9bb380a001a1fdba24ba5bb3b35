@@ -1,0 +1,25 @@
+package RandomTest;
+
+import java.io.*;
+import java.util.Scanner;
+
+import javax.swing.JOptionPane;
+
+public class Testing {
+	
+	public static void main(String[] args) throws IOException{
+String s = (String)JOptionPane.showInputDialog("What is the name of the File?");
+		
+		
+		System.out.println();
+		String input = "testing";
+		String fileName = input + ".txt";
+		File file = new File(fileName);
+		Scanner scan = new Scanner(file);
+		
+		while(scan.hasNextLine()){
+			System.out.println(scan.nextLine());
+		}
+
+	}
+}

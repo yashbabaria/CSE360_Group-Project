@@ -1,0 +1,16 @@
+package Project;
+
+import java.io.*;
+import java.util.*;
+import java.awt.*;
+import javax.swing.*;
+
+
+public class TextFormat {
+
+	public static void main(String[] args) throws IOException
+	{
+		
+	}
+
+}
