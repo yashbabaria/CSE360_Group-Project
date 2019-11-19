@@ -54,7 +54,7 @@ public class TextEditor {
 		frame.getContentPane().add(btnNewButton);
 		
 		TextArea textArea = new TextArea();
-		textArea.setBounds(0, 20, 499, 217);
+		textArea.setBounds(0, 20, 499, 179);
 		frame.getContentPane().add(textArea);
 		textArea.setText("This is the Title");
 	}
