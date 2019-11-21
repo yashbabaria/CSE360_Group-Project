@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,6 +9,8 @@ import javax.swing.*;
 
 public class TextEditor extends JFrame {
 	
+	private String content = "";
+	
 	// Constructor for the text editor when no file chosen
 	public TextEditor() {
 		window();
@@ -15,8 +18,8 @@ public class TextEditor extends JFrame {
 	
 	// Overload constructor for the text editor
 	// @param file, chosen by the user
-	public TextEditor(String fileName) {
-		processFile(fileName);
+	public TextEditor(File file) {
+		processFile(file);
 		window();
 	}
 
@@ -33,12 +36,12 @@ public class TextEditor extends JFrame {
 
 		// Create Text Area, and set the text area to the contents of the input file
 		JTextPane textArea = new JTextPane();
-		textArea.setText("This should be the content of the file, or empty if no file is loaded.");
+		textArea.setText(content);
 		
 		panel.add(textArea, BorderLayout.PAGE_START);
 		
 		JButton btnSaveAs = new JButton("Save As...");
-		panel.add(btnSaveAs);
+		panel.add(btnSaveAs, BorderLayout.PAGE_END);
 		
 		window.getContentPane().add(panel);
 		window.pack();
@@ -48,12 +51,16 @@ public class TextEditor extends JFrame {
 	
 	// Method for reading in the text file
 	// @param fileName, the name of the plaintext file
-	private void processFile(String fileName) {
+	private void processFile(File file) {
 		
 		// ToDo: Add error checking etc.
 		try {
-			BufferedReader fr = new BufferedReader(new FileReader(fileName));
-			String line = fr.readLine();
+			BufferedReader fr = new BufferedReader(new FileReader(file));
+			String line;
+			while ((line = fr.readLine()) != null) {
+				this.content += line + "\n";
+			}
+			fr.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found.");
 			e.printStackTrace();
