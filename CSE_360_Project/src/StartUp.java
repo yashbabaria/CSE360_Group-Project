@@ -1,4 +1,6 @@
 import java.awt.BorderLayout;
+import java.io.File;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -37,14 +39,13 @@ public class StartUp extends JFrame {
 		btnOpen.addActionListener(e -> {
 			String fileReturn = fileChoose();
 			description.setText(fileReturn);
-			TextEditor textEditor = new TextEditor(fileReturn);
 		});
 		btnPanel.add(btnOpen);
 		JButton btnCreate = new JButton("Create new file");
 		btnCreate.addActionListener(e -> {
 			description.setText("");
 			description.setEditable(true);
-			TextEditor textEditor = new TextEditor();
+			new TextEditor();
 		});
 		btnPanel.add(btnCreate);
 		
@@ -65,13 +66,16 @@ public class StartUp extends JFrame {
 		JFileChooser fc = new JFileChooser("Open existing file");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Plaintext files", "txt");
 		fc.setFileFilter(filter);
-		int returnVal = fc.showOpenDialog(getParent());
+		int returnVal = fc.showOpenDialog(this);
 		
 		// Return name of the file is successful, else "unable to open file"
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			return fc.getSelectedFile().getName();
+			File f = fc.getSelectedFile();
+			TextEditor textEditor = new TextEditor(f);
+			return "Uploaded the file: " + fc.getSelectedFile().getName();
 		}
-		else
-			return "Unable to open file";
+		else {
+			return "No file selected.";
+		}
 	}
 }
