@@ -19,7 +19,8 @@ public class TextEditor extends JFrame {
 	// Overload constructor for the text editor
 	// @param file, chosen by the user
 	public TextEditor(File file) {
-		processFile(file);
+		ProcessFile proc = new ProcessFile(file);
+		content = proc.printFile();
 		window();
 	}
 
@@ -54,6 +55,7 @@ public class TextEditor extends JFrame {
 	
 	// Method for reading in the text file
 	// @param fileName, the name of the plaintext file
+	/*
 	private void processFile(File file) {
 		
 		// ToDo: Add error checking etc.
@@ -77,6 +79,6 @@ public class TextEditor extends JFrame {
 	// @param line, a line that was read from the file
 	private void processLine(String line) {
 		
-	}
+	}*/
 
 }
