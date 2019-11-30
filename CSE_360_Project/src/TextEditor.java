@@ -11,7 +11,7 @@ public class TextEditor extends JFrame {
 	
 	private String content = "";
 	private JFrame initial;
-	
+	// Constructor for the text editor when no file chosen
 	public TextEditor() {
 		window();
 	}
@@ -25,13 +25,17 @@ public class TextEditor extends JFrame {
 		window();
 	}
 	
+	// Formats the classes content based on the flags
+	private void formatContent() {
+		String[] lines = content.split("\n");
+	}
 
 	// Text Editing window
 	private void window() {
 		
 		// Create Window and set the title to "TextFormat"
 		initial = new JFrame("TextFormat");
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		initial.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initial.setBounds(100, 100, 500, 750);
 		
 		// Create panel for layout management
@@ -45,11 +49,6 @@ public class TextEditor extends JFrame {
 		textArea.setText(content);
 		
 		panel.add(scrollPane, BorderLayout.CENTER);
-
-		JTextPane textArea = new JTextPane();
-		textArea.setText(content);
-		
-		panel.add(textArea, BorderLayout.PAGE_START);
 		
 		JButton btnSaveAs = new JButton("Save As...");
 		panel.add(btnSaveAs, BorderLayout.PAGE_END);
