@@ -1,6 +1,5 @@
 import java.awt.BorderLayout;
 import java.io.File;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
