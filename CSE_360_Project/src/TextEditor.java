@@ -20,8 +20,14 @@ public class TextEditor extends JFrame {
 	// @param file, chosen by the user
 	public TextEditor(File file) {
 		ProcessFile proc = new ProcessFile(file);
-		content = proc.printFile();
+		content = proc.returnFile();
+		formatContent();
 		window();
+	}
+	
+	// Formats the classes content based on the flags
+	private void formatContent() {
+		String[] lines = content.split("\n");
 	}
 
 	// Text Editing window
@@ -51,34 +57,4 @@ public class TextEditor extends JFrame {
 		initial.pack();
 		initial.setVisible(true);
 	}
-	
-	
-	// Method for reading in the text file
-	// @param fileName, the name of the plaintext file
-	/*
-	private void processFile(File file) {
-		
-		// ToDo: Add error checking etc.
-		try {
-			BufferedReader fr = new BufferedReader(new FileReader(file));
-			String line;
-			while ((line = fr.readLine()) != null) {
-				this.content += line + "\n";
-			}
-			fr.close();
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found.");
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println("Unable to read file.");
-			e.printStackTrace();
-		}
-	}
-	
-	// Method for processing each line from the input file
-	// @param line, a line that was read from the file
-	private void processLine(String line) {
-		
-	}*/
-
 }
