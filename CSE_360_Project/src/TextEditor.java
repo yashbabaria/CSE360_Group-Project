@@ -11,6 +11,7 @@ public class TextEditor extends JFrame {
 	
 	private String content = "";
 	private JFrame initial;
+
 	// Constructor for the text editor when no file chosen
 	public TextEditor() {
 		window();
@@ -20,7 +21,7 @@ public class TextEditor extends JFrame {
 	// @param file, chosen by the user
 	public TextEditor(File file) {
 		ProcessFile proc = new ProcessFile(file);
-		content = proc.returnFile();
+		this.content = proc.returnFile();
 		window();
 	}
 
@@ -41,7 +42,7 @@ public class TextEditor extends JFrame {
 		JTextPane textArea = new JTextPane();
 		scrollPane.setViewportView(textArea);
 		textArea.setText(content);
-		
+
 		panel.add(scrollPane, BorderLayout.CENTER);
 		
 		JButton btnSaveAs = new JButton("Save As...");

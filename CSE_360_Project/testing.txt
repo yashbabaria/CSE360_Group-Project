@@ -1,2 +1,4 @@
 -t
 THIS IS A TITLE
+-l -e
+More content for testing. dbwabdibwaiodwaiodbwadwa dbwabdbw. This paragraph should be split up into 80 char lines.
