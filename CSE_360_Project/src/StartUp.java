@@ -1,6 +1,5 @@
 import java.awt.BorderLayout;
 import java.io.File;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -23,6 +22,7 @@ public class StartUp extends JFrame {
 		panel.setLayout(new BorderLayout());
 		
 		// Create a non-editable Text Area to the program
+		JScrollPane scrollPane = new JScrollPane();
 		JTextArea description = new JTextArea();
 		description.setEditable(false);
 		description.setText("Load an existing file, or create a new file by clicking “Create New File”.\n" + 
@@ -46,11 +46,12 @@ public class StartUp extends JFrame {
 			description.setText("");
 			description.setEditable(true);
 			new TextEditor();
+			//new TestingApp();
 		});
 		btnPanel.add(btnCreate);
-		
+		scrollPane.setViewportView(description);
 		// Add elements to the panel
-		panel.add(description, BorderLayout.PAGE_START);
+		panel.add(scrollPane, BorderLayout.PAGE_START);
 		panel.add(btnPanel, BorderLayout.PAGE_END);
 		
 		// Add panel to the window
@@ -71,7 +72,7 @@ public class StartUp extends JFrame {
 		// Return name of the file is successful, else "unable to open file"
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File f = fc.getSelectedFile();
-			TextEditor textEditor = new TextEditor(f);
+			new TextEditor(f);
 			return "Uploaded the file: " + fc.getSelectedFile().getName();
 		}
 		else {
