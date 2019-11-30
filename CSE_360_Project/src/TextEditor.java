@@ -21,13 +21,7 @@ public class TextEditor extends JFrame {
 	public TextEditor(File file) {
 		ProcessFile proc = new ProcessFile(file);
 		content = proc.returnFile();
-		formatContent();
 		window();
-	}
-	
-	// Formats the classes content based on the flags
-	private void formatContent() {
-		String[] lines = content.split("\n");
 	}
 
 	// Text Editing window
