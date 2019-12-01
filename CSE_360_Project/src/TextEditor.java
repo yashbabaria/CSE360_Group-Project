@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
+import java.awt.Dimension;
 import javax.swing.*;
 
 public class TextEditor extends JFrame {
@@ -31,11 +31,12 @@ public class TextEditor extends JFrame {
 		// Create Window and set the title to "TextFormat"
 		initial = new JFrame("TextFormat");
 		initial.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		initial.setBounds(100, 100, 500, 750);
+		initial.setResizable(false);
 		
 		// Create panel for layout management
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
+		panel.setPreferredSize(new Dimension(500,500));
 
 		// Create Text Area, and set the text area to the contents of the input file
 		JScrollPane scrollPane = new JScrollPane();

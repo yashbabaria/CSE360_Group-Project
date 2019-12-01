@@ -3,7 +3,7 @@ import java.io.*;
 public class ProcessFile {
 	private String fileString = "";
 	String currentFlags = "";
-	String supportedFlags = "terlsdibn12";
+	String supportedFlags = "telcrsdibn12";
 
 	// Create string to format the file string
 	public ProcessFile(File file){
@@ -16,7 +16,7 @@ public class ProcessFile {
 				if (line.charAt(0) == '-') {
 					// Apply the formatting for the previous
 					// paragraph
-					this.fileString += formatLine(paragraph);
+					this.fileString += formatParagraph(paragraph);
 					// Reset paragraph to empty string
 					paragraph = "";
 
@@ -24,7 +24,6 @@ public class ProcessFile {
 					this.fileString += line + "\n";
 					// Get the new flags from the line
 					this.currentFlags = getFlags(line);
-					System.out.println("\nFlags:" + currentFlags);
 				}
 				// Add normal line
 				else {
@@ -32,7 +31,7 @@ public class ProcessFile {
 				}
 			}
 			// Apply formatting to the last paragraph
-			this.fileString += formatLine(paragraph);
+			this.fileString += formatParagraph(paragraph);
 
 			fr.close();
 
@@ -78,28 +77,45 @@ public class ProcessFile {
 
 	// Applies the current flags to the line
 	// Call the other formatting methods from this function
-	private String formatLine(String line) {
-		// Format title line
+	private String formatParagraph(String paragraph) {
+		// Insert empty line
 		if (currentFlags.contains("e")) {
-			line = empty(line);
+			paragraph = empty(paragraph);
 		}
+		// Title formatting
 		if (currentFlags.contains("t")) {
-			line = title(line);
+			paragraph = title(paragraph);
+		}
+
+		// First line indentation
+		if (currentFlags.contains("i")) {
+			paragraph = indent(paragraph);
+		}
+
+		// Word Spacing
+		if (currentFlags.contains("d")) {
+			paragraph = doubleSpace(paragraph);
+		}
+
+		// Apply Indentation
+		if (currentFlags.contains("t")) {
+			paragraph = title(paragraph);
 		}
 		else if (currentFlags.contains("l")) {
-			line = left(line);
+			paragraph = left(paragraph);
 		}
-		return line;
+
+		return paragraph;
 	}
 
 	
 	// -t tag: format as title
-	public String title(String paragraph){
-		return "\t" + paragraph;
+	private String title(String paragraph){
+		return "\t" + paragraph.toUpperCase();
 	}
 
 	// -l flag: left-justify the paragraph
-	public String left(String paragraph) {
+	private String left(String paragraph) {
 		int index = 0;
 		
 		/* This should split up the lines into 80 chars
@@ -109,22 +125,72 @@ public class ProcessFile {
 
 		return paragraph;
 	}
+
+	// -c flag: center-justify the paragraph
+	private String center(String paragraph) {
+		// ToDo
+		return paragraph;
+
+	}
+
+	// -r flag: right-justify the paragraph
+	private String right(String paragraph) {
+		// ToDo
+		return paragraph;
+	}
 	
 	// -e flag: Add an empty line
-	public String empty(String paragraph) {
+	private String empty(String paragraph) {
 		return "\n" + paragraph;
 	}
-	//-r
-	//-l
-	
-	//-s
-	//-d
-	
-	//-i
-	//-b
-	//-n
-	
-	//-1
-	//-2
-	
+
+	// -i flag: Indent first line in paragraph
+	private String indent(String paragraph) {
+		return "\t" + paragraph;
+	}
+
+	// -b flag: Block indent the paragraph
+	private String blockIndent(String paragraph) {
+		// ToDo
+		return paragraph;
+	}
+
+	// -n flag: Remove indentation from paragraph
+	private String noIndent(String paragraph) {
+		// ToDo
+		return paragraph;
+	}
+
+	// -1 flag: Paragraph is in one column
+	private String oneColumn(String paragraph) {
+		// ToDo
+		return paragraph;
+	}
+
+	// -2 flag: Split paragraph into two columns
+	private String twoColumn(String paragraph) {
+		// ToDo
+		return paragraph;
+	}
+
+	// -s flag: Single spaces words
+	private String singleSpace(String paragraph) {
+		// ToDo
+		return paragraph;
+	}	
+
+	// -d flag: Double spaces words
+	private String doubleSpace(String paragraph) {
+		int index = 0;
+		while (index < paragraph.length()) {
+			if (paragraph.charAt(index) == ' ') {
+				paragraph = paragraph.substring(0, index) + " "
+					+ paragraph.substring(index, paragraph.length());
+				index++;
+			}
+			index++;
+		}
+
+		return paragraph;
+	}
 }
