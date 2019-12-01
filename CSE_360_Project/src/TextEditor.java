@@ -37,7 +37,7 @@ public class TextEditor extends JFrame {
 		// Create panel for layout management
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
-		panel.setPreferredSize(new Dimension(500,500));
+		panel.setPreferredSize(new Dimension(700,500));
 
 		// Create Text Area, and set the text area to the contents of the input file
 		JScrollPane scrollPane = new JScrollPane();

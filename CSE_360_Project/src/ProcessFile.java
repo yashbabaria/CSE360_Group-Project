@@ -2,10 +2,10 @@ import java.io.*;
 
 public class ProcessFile {
 	private String fileString = "";
-	private char indentationFlag = '\0';
-	private char columnFlag = '\0';
-	private char justificationFlag = '\0';
-	private char spacingFlag = '\0';
+	private char indentationFlag = 'n';
+	private char columnFlag = '1';
+	private char justificationFlag = 'l';
+	private char spacingFlag = 's';
 	// Title, empty flag are put in current flags and reset every paragraph
 	String currentFlags = "";
 	String supportedFlags = "telcrsdibn12";
@@ -28,7 +28,7 @@ public class ProcessFile {
 					// Print the flag line
 					this.fileString += line + "\n";
 					// Get the new flags from the line
-					this.currentFlags = getFlags(line);
+					getFlags(line);
 				}
 				// Add normal line
 				else {
@@ -49,6 +49,13 @@ public class ProcessFile {
 		}
 	}
 
+	/*
+	// Update file on user action
+	public void updateFile() {
+
+	}
+	/*
+
 	/* Find a way to save the file into a txt when user clicks on save as
 	public File saveAs(){
 		File savingFile = new File();
@@ -56,9 +63,8 @@ public class ProcessFile {
 
 	// Returns the flags set in a line
 	// @param: line, a String of content
-	// @return: char[] an array of flags (e.g. { '1', 't' })
-	private String getFlags(String flagLine) {
-		String flags = "";
+	private void getFlags(String flagLine) {
+		this.currentFlags = "";
 		
 		int index = 0;
 		char next;
@@ -68,6 +74,7 @@ public class ProcessFile {
 			
 			if (flagLine.charAt(index) == '-') {
 				next = flagLine.charAt(index+1);
+
 				if (next == '1' || next == '2') {
 					columnFlag = next;
 				}
@@ -83,14 +90,13 @@ public class ProcessFile {
 
 				}
 				else {
-					flags += next;
+					this.currentFlags += next;
 				}
+
 			}
 			index++;
 			
 		}
-		
-		return flags;
 	}
 
 	public String returnFile(){
@@ -109,18 +115,20 @@ public class ProcessFile {
 			paragraph = title(paragraph);
 		}
 
-		// First line indentation
-		if (indentationFlag == 'i') {
-			paragraph = indent(paragraph);
-		}
-
 		// Word Spacing
 		if (spacingFlag == 'd') {
 			paragraph = doubleSpace(paragraph);
 		}
 		else if (spacingFlag == 's') {
 			paragraph = singleSpace(paragraph);
+		}
 
+		// First line indentation
+		if (indentationFlag == 'i') {
+			paragraph = indent(paragraph);
+		}
+		if (indentationFlag == 'b') {
+			paragraph = blockIndent(paragraph);
 		}
 
 		// Apply text justification
@@ -149,17 +157,32 @@ public class ProcessFile {
 	
 	// -t tag: format as title
 	private String title(String paragraph){
-		return "\t" + paragraph.toUpperCase();
+		return "     " + paragraph.toUpperCase();
 	}
 
 	// -l flag: left-justify the paragraph
 	private String left(String paragraph) {
 		int index = 0;
+		int lineIndex = 0;
 		
-		/* This should split up the lines into 80 chars
+		// Split up the lines into 80 chars
+		char current;
+		int offset;
 		while (index < paragraph.length()) {
+			current = paragraph.charAt(index);
+			if (current == ' ') {
+				offset = findNextSpace(paragraph, index);
+				if (offset + lineIndex > 80) {
+					paragraph = paragraph.substring(0, index+1)
+					+ "\n" + paragraph.substring(index+1, paragraph.length());
+					lineIndex = 0;
+
+				}
+
+			}
+			lineIndex++;
+			index++;
 		}
-		*/
 
 		return paragraph;
 	}
@@ -173,8 +196,64 @@ public class ProcessFile {
 
 	// -r flag: right-justify the paragraph
 	private String right(String paragraph) {
-		// ToDo
+		int index = 0;
+		int lineIndex = 0;
+		
+		// Split up the lines into 80 chars
+		char current;
+		int offset;
+		String spaces = "";
+		int i;
+		int wordSpace = 1;
+		if (spacingFlag == 'd') {
+			wordSpace = 2;
+		}
+		while (index < paragraph.length()) {
+			current = paragraph.charAt(index);
+			if (current == ' ' && index > 80) {
+				offset = findNextSpace(paragraph, index);
+				if (offset + lineIndex > 80) {
+					for (i = 0, spaces = ""; i < offset; i++){
+						spaces += " ";
+					}
+					/*
+					paragraph = paragraph.substring(0, index - lineIndex)
+					+ spaces + paragraph.substring(index+1, paragraph.length());
+					*/
+					paragraph = paragraph.substring(0, index) + "\n" + spaces + paragraph.substring(index+wordSpace, paragraph.length());
+					lineIndex = 0;
+
+				}
+
+			}
+			lineIndex++;
+			index++;
+		}
+
 		return paragraph;
+	}
+
+	// Finds the next occurence of the ' ' character in a line
+	// @return: integer representation of the offset from the index
+	private int findNextSpace(String paragraph, int index) {
+		int offset = 1;
+		index++;
+
+		// Account for double spacing flag
+		if (spacingFlag == 'd') {
+			index++;
+			offset++;
+		}
+
+		while (index < paragraph.length()) {
+			if (paragraph.charAt(index) == ' ') {
+				return offset;
+			}
+			offset++;
+			index++;
+		}
+
+		return -1;
 	}
 	
 	// -e flag: Add an empty line
@@ -184,18 +263,17 @@ public class ProcessFile {
 
 	// -i flag: Indent first line in paragraph
 	private String indent(String paragraph) {
-		return "\t" + paragraph;
+		return "     " + paragraph;
 	}
 
 	// -b flag: Block indent the paragraph
 	private String blockIndent(String paragraph) {
-		// ToDo
-		return paragraph;
+		// Block indent indents 10 spaces on every line
+		return "          " + paragraph;
 	}
 
 	// -n flag: Remove indentation from paragraph
 	private String noIndent(String paragraph) {
-		// ToDo
 		return paragraph;
 	}
 
