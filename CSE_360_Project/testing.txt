@@ -4,3 +4,5 @@ this is title
 Insert an empty line at the start. More content for testing. dbwabdibwaiodwaiodbwadwa dbwabdbw. This paragraph should be split up into 80 char lines and be left-indented.
 -d -i
 The first line is indented. Double spacing the words now too.
+-s
+Single space the words now again.

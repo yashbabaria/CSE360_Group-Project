@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.awt.Dimension;
+import java.awt.Font;
 import javax.swing.*;
 
 public class TextEditor extends JFrame {
@@ -43,6 +44,7 @@ public class TextEditor extends JFrame {
 		JTextPane textArea = new JTextPane();
 		scrollPane.setViewportView(textArea);
 		textArea.setText(content);
+		textArea.setFont(new Font("monospaced", Font.PLAIN, 12));
 
 		panel.add(scrollPane, BorderLayout.CENTER);
 		

@@ -2,6 +2,11 @@ import java.io.*;
 
 public class ProcessFile {
 	private String fileString = "";
+	private char indentationFlag = '\0';
+	private char columnFlag = '\0';
+	private char justificationFlag = '\0';
+	private char spacingFlag = '\0';
+	// Title, empty flag are put in current flags and reset every paragraph
 	String currentFlags = "";
 	String supportedFlags = "telcrsdibn12";
 
@@ -56,13 +61,30 @@ public class ProcessFile {
 		String flags = "";
 		
 		int index = 0;
-		
+		char next;
 		// Read line one char at a time, checking for flags
 		while (index < flagLine.length()
 			&& flagLine.charAt(index) != '\n') {
 			
 			if (flagLine.charAt(index) == '-') {
-				flags += flagLine.charAt(index+1);
+				next = flagLine.charAt(index+1);
+				if (next == '1' || next == '2') {
+					columnFlag = next;
+				}
+				else if (next == 'b' || next == 'i' || next == 'n') {
+					indentationFlag = next;
+
+				}
+				else if (next == 's' || next == 'd') {
+					spacingFlag = next;
+				}
+				else if (next == 'l' || next == 'c' || next == 'r') {
+					justificationFlag = next;
+
+				}
+				else {
+					flags += next;
+				}
 			}
 			index++;
 			
@@ -88,21 +110,37 @@ public class ProcessFile {
 		}
 
 		// First line indentation
-		if (currentFlags.contains("i")) {
+		if (indentationFlag == 'i') {
 			paragraph = indent(paragraph);
 		}
 
 		// Word Spacing
-		if (currentFlags.contains("d")) {
+		if (spacingFlag == 'd') {
 			paragraph = doubleSpace(paragraph);
 		}
+		else if (spacingFlag == 's') {
+			paragraph = singleSpace(paragraph);
 
-		// Apply Indentation
-		if (currentFlags.contains("t")) {
-			paragraph = title(paragraph);
 		}
-		else if (currentFlags.contains("l")) {
+
+		// Apply text justification
+		if (justificationFlag == 'l') {
 			paragraph = left(paragraph);
+		}
+		else if (justificationFlag == 'c') {
+			paragraph = center(paragraph);
+		}
+		else if (justificationFlag == 'r') {
+			paragraph = right(paragraph);
+		}
+
+		// Test for column flag
+		if (columnFlag == '1') {
+			paragraph = oneColumn(paragraph);
+		}
+		else if (columnFlag == '2') {
+			paragraph = twoColumn(paragraph);
+
 		}
 
 		return paragraph;
@@ -175,7 +213,15 @@ public class ProcessFile {
 
 	// -s flag: Single spaces words
 	private String singleSpace(String paragraph) {
-		// ToDo
+		int index = 0;
+		while (index < paragraph.length()) {
+			if (paragraph.charAt(index) == ' '
+				&& paragraph.charAt(index+1) == ' ') {
+				paragraph = paragraph.substring(0, index+1)
+					+ paragraph.substring(index+1, paragraph.length());
+			}
+			index++;
+		}
 		return paragraph;
 	}	
 
