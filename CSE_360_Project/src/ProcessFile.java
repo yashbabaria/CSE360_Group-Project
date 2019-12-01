@@ -17,8 +17,14 @@ public class ProcessFile {
 					// Apply the formatting for the previous
 					// paragraph
 					this.fileString += formatLine(paragraph);
+					// Reset paragraph to empty string
+					paragraph = "";
+
+					// Print the flag line
 					this.fileString += line + "\n";
+					// Get the new flags from the line
 					this.currentFlags = getFlags(line);
+					System.out.println("\nFlags:" + currentFlags);
 				}
 				// Add normal line
 				else {
@@ -53,13 +59,11 @@ public class ProcessFile {
 		int index = 0;
 		
 		// Read line one char at a time, checking for flags
-		while (index < flagLine.length() && flagLine.charAt(index) != '\n') {
+		while (index < flagLine.length()
+			&& flagLine.charAt(index) != '\n') {
 			
 			if (flagLine.charAt(index) == '-') {
-				// Line contains a supported flag
-				if (supportedFlags.indexOf(flagLine.charAt(index+1)) != 1) {
-					flags += flagLine.charAt(index+1);
-				}
+				flags += flagLine.charAt(index+1);
 			}
 			index++;
 			
@@ -76,22 +80,25 @@ public class ProcessFile {
 	// Call the other formatting methods from this function
 	private String formatLine(String line) {
 		// Format title line
+		if (currentFlags.contains("e")) {
+			line = empty(line);
+		}
 		if (currentFlags.contains("t")) {
-			return title(line);
+			line = title(line);
 		}
 		else if (currentFlags.contains("l")) {
-			return left(line);
+			line = left(line);
 		}
 		return line;
 	}
 
 	
-	// Method for formatting a paragraph with the -t tag
+	// -t tag: format as title
 	public String title(String paragraph){
 		return "\t" + paragraph;
 	}
 
-	// Method for formatting a paragraph with the -l tag
+	// -l flag: left-justify the paragraph
 	public String left(String paragraph) {
 		int index = 0;
 		
@@ -103,9 +110,9 @@ public class ProcessFile {
 		return paragraph;
 	}
 	
-	//-e
-	public void emptySpace(){
-		
+	// -e flag: Add an empty line
+	public String empty(String paragraph) {
+		return "\n" + paragraph;
 	}
 	//-r
 	//-l
