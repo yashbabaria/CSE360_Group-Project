@@ -106,10 +106,6 @@ public class ProcessFile {
 	// Applies the current flags to the line
 	// Call the other formatting methods from this function
 	private String formatParagraph(String paragraph) {
-		// Insert empty line
-		if (currentFlags.contains("e")) {
-			paragraph = empty(paragraph);
-		}
 		// Title formatting
 		if (currentFlags.contains("t")) {
 			paragraph = title(paragraph);
@@ -121,14 +117,6 @@ public class ProcessFile {
 		}
 		else if (spacingFlag == 's') {
 			paragraph = singleSpace(paragraph);
-		}
-
-		// First line indentation
-		if (indentationFlag == 'i') {
-			paragraph = indent(paragraph);
-		}
-		if (indentationFlag == 'b') {
-			paragraph = blockIndent(paragraph);
 		}
 
 		// Apply text justification
@@ -151,13 +139,27 @@ public class ProcessFile {
 
 		}
 
+		// First line indentation
+		if (indentationFlag == 'i') {
+			paragraph = indent(paragraph);
+		}
+		if (indentationFlag == 'b') {
+			paragraph = blockIndent(paragraph);
+		}
+
+
+		// Insert empty line
+		if (currentFlags.contains("e")) {
+			paragraph = empty(paragraph);
+		}
+
 		return paragraph;
 	}
 
 	
 	// -t tag: format as title
 	private String title(String paragraph){
-		return "     " + paragraph.toUpperCase();
+		return center(paragraph).toUpperCase();
 	}
 
 	// -l flag: left-justify the paragraph
@@ -167,31 +169,58 @@ public class ProcessFile {
 		
 		// Split up the lines into 80 chars
 		char current;
-		int offset;
+		int lastSpace = 0;
 		while (index < paragraph.length()) {
 			current = paragraph.charAt(index);
 			if (current == ' ') {
-				offset = findNextSpace(paragraph, index);
-				if (offset + lineIndex > 80) {
-					paragraph = paragraph.substring(0, index+1)
-					+ "\n" + paragraph.substring(index+1, paragraph.length());
-					lineIndex = 0;
-
-				}
+				lastSpace = index;
+			}
+			if (lineIndex >= 80) {
+				paragraph = paragraph.substring(0, lastSpace) + "\n" + paragraph.substring(lastSpace+1, paragraph.length());
+				lineIndex = 0;
 
 			}
 			lineIndex++;
 			index++;
 		}
-
 		return paragraph;
 	}
 
 	// -c flag: center-justify the paragraph
 	private String center(String paragraph) {
-		// ToDo
-		return paragraph;
+		int index = 0;
+		int lineIndex = 0;
+		
+		// Split up the lines into 80 chars
+		char current;
+		String spaces = "";
+		int lastSpace = 0;
+		while (index < paragraph.length()) {
+			current = paragraph.charAt(index);
 
+			if (current == ' ') {
+				lastSpace = index;
+			}
+
+			if (lineIndex >= 80) {
+				spaces = "";
+				for (int i = 0; i < index - lastSpace; i++) {
+					spaces += " ";
+				}
+				paragraph = paragraph.substring(0,index-lineIndex) + spaces + paragraph.substring(index-lineIndex, lastSpace) + spaces + "\n" + paragraph.substring(lastSpace+1, paragraph.length());
+				index += spaces.length() + 1;
+				lineIndex = 0;
+			}
+
+			lineIndex++;
+			index++;
+		}
+		for (int i = 0; i < (80 - lineIndex) / 2; i++) {
+			spaces += " ";
+		}
+		paragraph = paragraph.substring(0,index-lineIndex) + spaces + paragraph.substring(index-lineIndex, paragraph.length()); 
+
+		return paragraph;
 	}
 
 	// -r flag: right-justify the paragraph
@@ -201,59 +230,34 @@ public class ProcessFile {
 		
 		// Split up the lines into 80 chars
 		char current;
-		int offset;
 		String spaces = "";
-		int i;
-		int wordSpace = 1;
-		if (spacingFlag == 'd') {
-			wordSpace = 2;
-		}
+		int lastSpace = 0;
 		while (index < paragraph.length()) {
 			current = paragraph.charAt(index);
-			if (current == ' ' && index > 80) {
-				offset = findNextSpace(paragraph, index);
-				if (offset + lineIndex > 80) {
-					for (i = 0, spaces = ""; i < offset; i++){
-						spaces += " ";
-					}
-					/*
-					paragraph = paragraph.substring(0, index - lineIndex)
-					+ spaces + paragraph.substring(index+1, paragraph.length());
-					*/
-					paragraph = paragraph.substring(0, index) + "\n" + spaces + paragraph.substring(index+wordSpace, paragraph.length());
-					lineIndex = 0;
 
-				}
-
+			if (current == ' ') {
+				lastSpace = index;
 			}
+
+			if (lineIndex >= 80) {
+				spaces = "";
+				for (int i = 0; i < index - lastSpace; i++) {
+					spaces += " ";
+				}
+				if (index - lineIndex == 0) {
+					paragraph = paragraph.substring(0,index-lineIndex) + spaces + paragraph.substring(index-lineIndex, paragraph.length());
+				}
+				else {
+					paragraph = paragraph.substring(0,index-lineIndex) + "\n" + spaces + paragraph.substring(index-lineIndex, paragraph.length());
+				}
+				lineIndex = 0;
+			}
+
 			lineIndex++;
 			index++;
 		}
 
 		return paragraph;
-	}
-
-	// Finds the next occurence of the ' ' character in a line
-	// @return: integer representation of the offset from the index
-	private int findNextSpace(String paragraph, int index) {
-		int offset = 1;
-		index++;
-
-		// Account for double spacing flag
-		if (spacingFlag == 'd') {
-			index++;
-			offset++;
-		}
-
-		while (index < paragraph.length()) {
-			if (paragraph.charAt(index) == ' ') {
-				return offset;
-			}
-			offset++;
-			index++;
-		}
-
-		return -1;
 	}
 	
 	// -e flag: Add an empty line
@@ -292,7 +296,7 @@ public class ProcessFile {
 	// -s flag: Single spaces words
 	private String singleSpace(String paragraph) {
 		int index = 0;
-		while (index < paragraph.length()) {
+		while (index < paragraph.length() - 1) {
 			if (paragraph.charAt(index) == ' '
 				&& paragraph.charAt(index+1) == ' ') {
 				paragraph = paragraph.substring(0, index+1)

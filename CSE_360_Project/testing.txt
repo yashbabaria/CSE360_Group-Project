@@ -5,6 +5,8 @@ Insert an empty line at the start. More content for testing. dbwabdibwaiodwaiodb
 -d -i
 The first line is indented. Double spacing the words now too. Left indentation is still being applied
 -r
-Right indent the text now. Quia quisquam et pariatur deleniti sint. Nulla enim rerum labore quaerat. Nisi incidunt praesentium molestiae nisi non aliquam et. Aut dolores sed aspernatur impedit odit dolor consequatur nisi. Voluptatem similique tempora nihil sit quia aliquam. Ipsam soluta alias libero.
--s
-Single space the words now again.
+Right justify the text now. Quia quisquam et pariatur deleniti sint. Nulla enim rerum labore quaerat. Nisi incidunt praesentium molestiae nisi non aliquam et. Aut dolores sed aspernatur impedit odit dolor consequatur nisi. Voluptatem similique tempora nihil sit quia aliquam. Ipsam soluta alias libero.
+-e -c
+Empty line start and center justify text. Quia quisquam et pariatur deleniti sint. Nulla enim rerum labore quaerat. Nisi incidunt praesentium molestiae nisi non aliquam et. Aut dolores sed aspernatur impedit odit dolor consequatur nisi. Voluptatem similique tempora nihil sit quia aliquam. Ipsam soluta alias libero.
+-n -s
+Clear indentation and single space the words again.
