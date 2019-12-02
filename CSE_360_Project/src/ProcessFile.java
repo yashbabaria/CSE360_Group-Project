@@ -144,7 +144,7 @@ public class ProcessFile {
 		if (indentationFlag == 'i') {
 			paragraph = indent(paragraph);
 		}
-		if (indentationFlag == 'b') {
+		else if (indentationFlag == 'b') {
 			paragraph = blockIndent(paragraph);
 		}
 
@@ -158,16 +158,6 @@ public class ProcessFile {
 		else if (columnFlag != '2' && justificationFlag == 'r') {
 			paragraph = right(paragraph);
 		}
-
-		/*
-		// First line indentation
-		if (indentationFlag == 'i') {
-			paragraph = indent(paragraph);
-		}
-		if (indentationFlag == 'b') {
-			paragraph = blockIndent(paragraph);
-		}
-		*/
 
 
 		// Insert empty line
@@ -199,7 +189,7 @@ public class ProcessFile {
 			}
 			if (lineIndex >= lineWidth) {
 				paragraph = paragraph.substring(0, lastSpace) + "\n" + paragraph.substring(lastSpace+1, paragraph.length());
-				lineIndex = 0;
+				lineIndex = index - lastSpace;
 
 			}
 			lineIndex++;
