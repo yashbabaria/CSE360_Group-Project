@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Window;
 import javax.swing.*;
 
 public class TextEditor extends JFrame {
@@ -54,5 +55,6 @@ public class TextEditor extends JFrame {
 		initial.getContentPane().add(panel);
 		initial.pack();
 		initial.setVisible(true);
+		initial.setLocationRelativeTo(null);
 	}
 }
