@@ -1,6 +1,5 @@
 import java.awt.BorderLayout;
 import java.io.File;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -73,8 +72,7 @@ public class StartUp extends JFrame {
 		// Return name of the file is successful, else "unable to open file"
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File f = fc.getSelectedFile();
-			TextEditor textEditor = new TextEditor(f);
-			//TestingApp textEditor = new TestingApp(f);
+			new TextEditor(f);
 			return "Uploaded the file: " + fc.getSelectedFile().getName();
 		}
 		else {
