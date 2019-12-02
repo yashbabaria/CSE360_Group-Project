@@ -78,6 +78,12 @@ public class ProcessFile {
 
 				if (next == '1' || next == '2') {
 					columnFlag = next;
+					if (next == '2') {
+						lineWidth = 35;
+					}
+					else {
+						lineWidth = 80;
+					}
 				}
 				else if (next == 'b' || next == 'i' || next == 'n') {
 					indentationFlag = next;
@@ -132,7 +138,6 @@ public class ProcessFile {
 		}
 		else if (columnFlag == '2') {
 			paragraph = twoColumn(paragraph);
-
 		}
 
 		// Apply text justification
@@ -254,7 +259,7 @@ public class ProcessFile {
 					paragraph = paragraph.substring(0,index-lineIndex) + spaces + paragraph.substring(index-lineIndex, paragraph.length());
 				}
 				else {
-					paragraph = paragraph.substring(0,index-lineIndex) + "\n" + spaces + paragraph.substring(index-lineIndex, paragraph.length());
+					paragraph = paragraph.substring(0,index-lineIndex+1) + "\n" + spaces + paragraph.substring(index-lineIndex+1, paragraph.length());
 				}
 				lineIndex = 0;
 			}
@@ -262,6 +267,10 @@ public class ProcessFile {
 			lineIndex++;
 			index++;
 		}
+		for (int i = 0; i < lineWidth - lineIndex; i++) {
+			spaces += " ";
+		}
+		paragraph = paragraph.substring(0,index-lineIndex+1) + "\n" + spaces + paragraph.substring(index-lineIndex+1, paragraph.length());
 
 		return paragraph;
 	}
@@ -304,25 +313,41 @@ public class ProcessFile {
 
 	// -1 flag: Paragraph is in one column
 	private String oneColumn(String paragraph) {
-		// ToDo
 		return paragraph;
 	}
 
 	// -2 flag: Split paragraph into two columns
 	private String twoColumn(String paragraph) {
-		String column1 = paragraph.substring(0, paragraph.length() / 2);
-		String column2 = paragraph.substring(paragraph.length() / 2, paragraph.length());
+		int index1;
+		int index2;
+		index1 = paragraph.indexOf(" ", paragraph.length() / 2);
+		String column1 = paragraph.substring(0, index1);
+		column1 = left(column1);
+		String column2 = paragraph.substring(index1, paragraph.length());
+		column2 = left(column2);
+
 		paragraph = "";
-		int index = 0;
-		while (index < column1.length() - 35) {
-			paragraph += column1.substring(index, index + 35)
-				+ "          " + column2.substring(index, index + 35) + "\n";
+		index1 = 0;
+		index2 = 0;
+		int newLine1 = column1.indexOf("\n");
+		int newLine2 = column2.indexOf("\n");
+		String spaces = "";
+		int i = 0;
 
-			index += 35;
-
+		while (newLine1 != -1 && newLine2 != -1) {
+			for (i = 0, spaces = ""; i + (newLine1 - index1) <= 45; i++) {
+				spaces += " ";
+			}
+			paragraph += column1.substring(index1, newLine1) + spaces
+				+ column2.substring(index2, newLine2) + "\n";
+			index1 = newLine1 + 1;
+			index2 = newLine2 + 1;
+			newLine1 = column1.indexOf("\n", newLine1+1);
+			newLine2 = column2.indexOf("\n", newLine2+1);
 		}
-		paragraph += column1.substring(index, column1.length())
-			+ "          " + column2.substring(index, column1.length());
+
+		paragraph += column1.substring(index1, column1.length()) + spaces
+			+ column2.substring(index2, column2.length()) + "\n";
 		return paragraph;
 	}
 
