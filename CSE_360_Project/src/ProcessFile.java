@@ -140,6 +140,14 @@ public class ProcessFile {
 			paragraph = twoColumn(paragraph);
 		}
 
+		// First line indentation
+		if (indentationFlag == 'i') {
+			paragraph = indent(paragraph);
+		}
+		else if (indentationFlag == 'b') {
+			paragraph = blockIndent(paragraph);
+		}
+
 		// Apply text justification
 		if (columnFlag != '2' && justificationFlag == 'l') {
 			paragraph = left(paragraph);
@@ -149,14 +157,6 @@ public class ProcessFile {
 		}
 		else if (columnFlag != '2' && justificationFlag == 'r') {
 			paragraph = right(paragraph);
-		}
-
-		// First line indentation
-		if (indentationFlag == 'i') {
-			paragraph = indent(paragraph);
-		}
-		if (indentationFlag == 'b') {
-			paragraph = blockIndent(paragraph);
 		}
 
 
@@ -189,7 +189,7 @@ public class ProcessFile {
 			}
 			if (lineIndex >= lineWidth) {
 				paragraph = paragraph.substring(0, lastSpace) + "\n" + paragraph.substring(lastSpace+1, paragraph.length());
-				lineIndex = 0;
+				lineIndex = index - lastSpace;
 
 			}
 			lineIndex++;
