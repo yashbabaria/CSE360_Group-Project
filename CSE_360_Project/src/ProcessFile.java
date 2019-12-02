@@ -140,6 +140,14 @@ public class ProcessFile {
 			paragraph = twoColumn(paragraph);
 		}
 
+		// First line indentation
+		if (indentationFlag == 'i') {
+			paragraph = indent(paragraph);
+		}
+		if (indentationFlag == 'b') {
+			paragraph = blockIndent(paragraph);
+		}
+
 		// Apply text justification
 		if (columnFlag != '2' && justificationFlag == 'l') {
 			paragraph = left(paragraph);
@@ -151,6 +159,7 @@ public class ProcessFile {
 			paragraph = right(paragraph);
 		}
 
+		/*
 		// First line indentation
 		if (indentationFlag == 'i') {
 			paragraph = indent(paragraph);
@@ -158,6 +167,7 @@ public class ProcessFile {
 		if (indentationFlag == 'b') {
 			paragraph = blockIndent(paragraph);
 		}
+		*/
 
 
 		// Insert empty line
