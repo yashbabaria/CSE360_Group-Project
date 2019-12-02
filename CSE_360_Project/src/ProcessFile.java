@@ -2,6 +2,7 @@ import java.io.*;
 
 public class ProcessFile {
 	private String fileString = "";
+	private int lineWidth = 80;
 	private char indentationFlag = 'n';
 	private char columnFlag = '1';
 	private char justificationFlag = 'l';
@@ -69,7 +70,7 @@ public class ProcessFile {
 		int index = 0;
 		char next;
 		// Read line one char at a time, checking for flags
-		while (index < flagLine.length()
+		while (index < flagLine.length() - 1
 			&& flagLine.charAt(index) != '\n') {
 			
 			if (flagLine.charAt(index) == '-') {
@@ -80,6 +81,12 @@ public class ProcessFile {
 				}
 				else if (next == 'b' || next == 'i' || next == 'n') {
 					indentationFlag = next;
+					if (next == 'b') {
+						lineWidth = 70;
+					}
+					else {
+						lineWidth = 80;
+					}
 
 				}
 				else if (next == 's' || next == 'd') {
@@ -119,17 +126,6 @@ public class ProcessFile {
 			paragraph = singleSpace(paragraph);
 		}
 
-		// Apply text justification
-		if (justificationFlag == 'l') {
-			paragraph = left(paragraph);
-		}
-		else if (justificationFlag == 'c') {
-			paragraph = center(paragraph);
-		}
-		else if (justificationFlag == 'r') {
-			paragraph = right(paragraph);
-		}
-
 		// Test for column flag
 		if (columnFlag == '1') {
 			paragraph = oneColumn(paragraph);
@@ -137,6 +133,17 @@ public class ProcessFile {
 		else if (columnFlag == '2') {
 			paragraph = twoColumn(paragraph);
 
+		}
+
+		// Apply text justification
+		if (columnFlag != '2' && justificationFlag == 'l') {
+			paragraph = left(paragraph);
+		}
+		else if (columnFlag != '2' && justificationFlag == 'c') {
+			paragraph = center(paragraph);
+		}
+		else if (columnFlag != '2' && justificationFlag == 'r') {
+			paragraph = right(paragraph);
 		}
 
 		// First line indentation
@@ -175,7 +182,7 @@ public class ProcessFile {
 			if (current == ' ') {
 				lastSpace = index;
 			}
-			if (lineIndex >= 80) {
+			if (lineIndex >= lineWidth) {
 				paragraph = paragraph.substring(0, lastSpace) + "\n" + paragraph.substring(lastSpace+1, paragraph.length());
 				lineIndex = 0;
 
@@ -202,7 +209,7 @@ public class ProcessFile {
 				lastSpace = index;
 			}
 
-			if (lineIndex >= 80) {
+			if (lineIndex >= lineWidth) {
 				spaces = "";
 				for (int i = 0; i < index - lastSpace; i++) {
 					spaces += " ";
@@ -215,7 +222,7 @@ public class ProcessFile {
 			lineIndex++;
 			index++;
 		}
-		for (int i = 0; i < (80 - lineIndex) / 2; i++) {
+		for (int i = 0; i < (lineWidth - lineIndex) / 2; i++) {
 			spaces += " ";
 		}
 		paragraph = paragraph.substring(0,index-lineIndex) + spaces + paragraph.substring(index-lineIndex, paragraph.length()); 
@@ -228,7 +235,6 @@ public class ProcessFile {
 		int index = 0;
 		int lineIndex = 0;
 		
-		// Split up the lines into 80 chars
 		char current;
 		String spaces = "";
 		int lastSpace = 0;
@@ -239,7 +245,7 @@ public class ProcessFile {
 				lastSpace = index;
 			}
 
-			if (lineIndex >= 80) {
+			if (lineIndex >= lineWidth) {
 				spaces = "";
 				for (int i = 0; i < index - lastSpace; i++) {
 					spaces += " ";
@@ -273,7 +279,22 @@ public class ProcessFile {
 	// -b flag: Block indent the paragraph
 	private String blockIndent(String paragraph) {
 		// Block indent indents 10 spaces on every line
-		return "          " + paragraph;
+		int index = 0;
+		paragraph = "          " + paragraph;
+
+		char current;
+		while (index < paragraph.length()) {
+			current = paragraph.charAt(index);
+			if (current == '\n') {
+				paragraph = paragraph.substring(0, index+1)
+					+ "          "
+					+ paragraph.substring(index+1, paragraph.length());
+				index += 10;
+			}
+			index++;
+		}
+
+		return paragraph;
 	}
 
 	// -n flag: Remove indentation from paragraph
@@ -289,7 +310,19 @@ public class ProcessFile {
 
 	// -2 flag: Split paragraph into two columns
 	private String twoColumn(String paragraph) {
-		// ToDo
+		String column1 = paragraph.substring(0, paragraph.length() / 2);
+		String column2 = paragraph.substring(paragraph.length() / 2, paragraph.length());
+		paragraph = "";
+		int index = 0;
+		while (index < column1.length() - 35) {
+			paragraph += column1.substring(index, index + 35)
+				+ "          " + column2.substring(index, index + 35) + "\n";
+
+			index += 35;
+
+		}
+		paragraph += column1.substring(index, column1.length())
+			+ "          " + column2.substring(index, column1.length());
 		return paragraph;
 	}
 
