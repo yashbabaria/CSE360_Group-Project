@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Window;
@@ -50,11 +53,36 @@ public class TextEditor extends JFrame {
 		panel.add(scrollPane, BorderLayout.CENTER);
 		
 		JButton btnSaveAs = new JButton("Save As...");
+		btnSaveAs.addActionListener(e -> {
+			saveToFile(textArea, btnSaveAs);
+		});
 		panel.add(btnSaveAs, BorderLayout.PAGE_END);
 		
 		initial.getContentPane().add(panel);
 		initial.pack();
 		initial.setVisible(true);
 		initial.setLocationRelativeTo(null);
+	}
+
+	// Saves the content of the window to a .txt file
+	private void saveToFile(JTextPane textArea, JButton btnSaveAs) {
+		JFileChooser fileChooser = new JFileChooser();
+		int pressed = fileChooser.showSaveDialog(btnSaveAs);
+		if (pressed == JFileChooser.APPROVE_OPTION) {
+			File file = fileChooser.getSelectedFile();
+			if (file == null) {
+				return;
+			}
+			if (!file.getName().endsWith(".txt")) {
+				file = new File(file.getParentFile(), file.getName() + ".txt");
+			}
+			try {
+				textArea.write(new OutputStreamWriter(new FileOutputStream(file),
+							"utf-8"));
+				Desktop.getDesktop().open(file);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
