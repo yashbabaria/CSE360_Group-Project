@@ -111,7 +111,10 @@ public class ProcessFile {
 				}
 				else if (next == 'b' || next == 'i' || next == 'n') {
 					indentationFlag = next;
-					if (next == 'b') {
+					if (next == 'b' && columnFlag == '2') {
+						lineWidth = 25;
+					}
+					else if (next == 'b') {
 						lineWidth = 70;
 					}
 					else {
