@@ -78,9 +78,9 @@ public class ProcessFile {
 				paragraph += lines[index] + "\n";
 			}
 
-			// Apply formatting to the last paragraph
-			this.fileString += formatParagraph(paragraph);
 		}
+		// Apply formatting to the last paragraph
+		this.fileString += formatParagraph(paragraph);
 	}
 
 	// Returns the flags set in a line
