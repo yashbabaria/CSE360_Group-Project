@@ -53,17 +53,6 @@ public class TextEditor extends JFrame {
 		textArea.setFont(new Font("monospaced", Font.PLAIN, 12));
 
 		panel.add(scrollPane, BorderLayout.CENTER);
-		
-
-		/*
-		JButton btnSaveAs = new JButton("Save As...");
-		btnSaveAs.addActionListener(e -> {
-			saveToFile(textArea, btnSaveAs);
-		});
-		JButton btnFormat = new JButton("Format Text");
-		panel.add(btnFormat, BorderLayout.PAGE_END);
-		panel.add(btnSaveAs, BorderLayout.PAGE_END);
-		*/
 
 
 		// Button panel
