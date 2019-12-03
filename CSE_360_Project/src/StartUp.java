@@ -43,7 +43,7 @@ public class StartUp extends JFrame {
 		btnPanel.add(btnOpen);
 		JButton btnCreate = new JButton("Create new file");
 		btnCreate.addActionListener(e -> {
-			description.setText("");
+			description.setText("Created a new file.");
 			description.setEditable(true);
 			new TextEditor();
 			//new TestingApp();

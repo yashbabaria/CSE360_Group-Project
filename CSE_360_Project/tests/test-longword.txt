@@ -1,0 +1,8 @@
+-l
+Test how it handles a word that is longer than the maximum line length: dwaiodnwaodnwiaondiwoandiowandwnaiodnwaiondwaiondiwandiownaiodnwaiodwnaidwaiodnwaodnwiaondiwoandiowandwnaiodnwaiondwaiondiwandiownaiodnwaiodwnai.
+-c
+Test how it handles a word that is longer than the maximum line length: dwaiodnwaodnwiaondiwoandiowandwnaiodnwaiondwaiondiwandiownaiodnwaiodwnaidwaiodnwaodnwiaondiwoandiowandwnaiodnwaiondwaiondiwandiownaiodnwaiodwnai.
+-r
+Test how it handles a word that is longer than the maximum line length: dwaiodnwaodnwiaondiwoandiowandwnaiodnwaiondwaiondiwandiownaiodnwaiodwnaidwaiodnwaodnwiaondiwoandiowandwnaiodnwaiondwaiondiwandiownaiodnwaiodwnai.
+-r -2
+Test how it handles a word that is longer than the maximum line length: dwaiodnwaodnwiaondiwoandiowandwnaiodnwaiondwaiondiwandiownaiodnwaiodwnaidwaiodnwaodnwiaondiwoandiowandwnaiodnwaiondwaiondiwandiownaiodnwaiodwnai.
