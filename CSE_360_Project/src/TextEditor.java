@@ -16,16 +16,18 @@ public class TextEditor extends JFrame {
 	
 	private String content = "";
 	private JFrame initial;
+	private ProcessFile proc;
 
 	// Constructor for the text editor when no file chosen
 	public TextEditor() {
+		proc = new ProcessFile();
 		window();
 	}
 	
 	// Overload constructor for the text editor
 	// @param file, chosen by the user
 	public TextEditor(File file) {
-		ProcessFile proc = new ProcessFile(file);
+		proc = new ProcessFile(file);
 		this.content = proc.returnFile();
 		window();
 	}
@@ -51,12 +53,25 @@ public class TextEditor extends JFrame {
 		textArea.setFont(new Font("monospaced", Font.PLAIN, 12));
 
 		panel.add(scrollPane, BorderLayout.CENTER);
+
+
+		// Button panel
+		JPanel btnPanel = new JPanel();
 		
+		// Create Buttons
+		JButton btnFormat = new JButton("Format Text");
+		btnFormat.addActionListener(e -> {
+			formatFile(textArea);
+		});
+		btnPanel.add(btnFormat);
+
 		JButton btnSaveAs = new JButton("Save As...");
 		btnSaveAs.addActionListener(e -> {
 			saveToFile(textArea, btnSaveAs);
 		});
-		panel.add(btnSaveAs, BorderLayout.PAGE_END);
+		btnPanel.add(btnSaveAs);
+		panel.add(btnPanel, BorderLayout.PAGE_END);
+
 		
 		initial.getContentPane().add(panel);
 		initial.pack();
@@ -84,5 +99,13 @@ public class TextEditor extends JFrame {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private void formatFile(JTextPane textArea) {
+		// this.content = proc.returnFile();
+		proc.updateFile(textArea.getText());
+		this.content = proc.returnFile();
+		// this.content = "DWAUIDBA";
+		textArea.setText(content);
 	}
 }

@@ -3,6 +3,7 @@ import java.io.*;
 public class ProcessFile {
 	private String fileString = "";
 	private int lineWidth = 80;
+	private int wordSpacing = 1;
 	private char indentationFlag = 'n';
 	private char columnFlag = '1';
 	private char justificationFlag = 'l';
@@ -10,6 +11,10 @@ public class ProcessFile {
 	// Title, empty flag are put in current flags and reset every paragraph
 	String currentFlags = "";
 	String supportedFlags = "telcrsdibn12";
+
+	public ProcessFile () {
+		;
+	}
 
 	// Create string to format the file string
 	public ProcessFile(File file){
@@ -50,17 +55,33 @@ public class ProcessFile {
 		}
 	}
 
-	/*
 	// Update file on user action
-	public void updateFile() {
+	public void updateFile(String text) {
+		String line = "";
+		String paragraph = "";
+		String lines[] = text.split("\\n");
+		for (int index = 0; index < lines.length; index++) {
+			if (lines[index].length() > 0 && lines[index].charAt(0) == '-') {
+				// Apply the formatting for the previous
+				// paragraph
+				this.fileString += formatParagraph(paragraph);
+				// Reset paragraph to empty string
+				paragraph = "";
 
+				// Print the flag line
+				this.fileString += lines[index] + "\n";
+				// Get the new flags from the line
+				getFlags(lines[index]);
+			}
+			// Add normal line
+			else {
+				paragraph += lines[index] + "\n";
+			}
+
+			// Apply formatting to the last paragraph
+			this.fileString += formatParagraph(paragraph);
+		}
 	}
-	/*
-
-	/* Find a way to save the file into a txt when user clicks on save as
-	public File saveAs(){
-		File savingFile = new File();
-	}*/
 
 	// Returns the flags set in a line
 	// @param: line, a String of content
@@ -78,7 +99,10 @@ public class ProcessFile {
 
 				if (next == '1' || next == '2') {
 					columnFlag = next;
-					if (next == '2') {
+					if (next == '2' && indentationFlag == 'b') {
+						lineWidth = 25;
+					}
+					else if (next == '2') {
 						lineWidth = 35;
 					}
 					else {
@@ -97,6 +121,12 @@ public class ProcessFile {
 				}
 				else if (next == 's' || next == 'd') {
 					spacingFlag = next;
+					if (next == 's') {
+						wordSpacing = 1;
+					}
+					else {
+						wordSpacing = 2;
+					}
 				}
 				else if (next == 'l' || next == 'c' || next == 'r') {
 					justificationFlag = next;
