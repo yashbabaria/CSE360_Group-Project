@@ -144,9 +144,6 @@ public class ProcessFile {
 		if (indentationFlag == 'i') {
 			paragraph = indent(paragraph);
 		}
-		else if (indentationFlag == 'b') {
-			paragraph = blockIndent(paragraph);
-		}
 
 		// Apply text justification
 		if (columnFlag != '2' && justificationFlag == 'l') {
@@ -159,6 +156,10 @@ public class ProcessFile {
 			paragraph = right(paragraph);
 		}
 
+		// Block indentation
+		if (indentationFlag == 'b') {
+			paragraph = blockIndent(paragraph);
+		}
 
 		// Insert empty line
 		if (currentFlags.contains("e")) {
@@ -187,10 +188,18 @@ public class ProcessFile {
 			if (current == ' ') {
 				lastSpace = index;
 			}
-			if (lineIndex >= lineWidth) {
+
+			// Handle words that are longer than the line maximum
+			if (lineIndex >= lineWidth && lastSpace == 0) {
+				paragraph = paragraph.substring(0, index)
+					+ "-\n" + paragraph.substring(index, paragraph.length());
+				index += 2;
+				lineIndex = 0;
+			}
+			else if (lineIndex >= lineWidth) {
 				paragraph = paragraph.substring(0, lastSpace) + "\n" + paragraph.substring(lastSpace+1, paragraph.length());
 				lineIndex = index - lastSpace;
-
+				lastSpace = 0;
 			}
 			lineIndex++;
 			index++;
@@ -214,14 +223,22 @@ public class ProcessFile {
 				lastSpace = index;
 			}
 
-			if (lineIndex >= lineWidth) {
+			// Handle words that are longer than the line maximum
+			if (lineIndex >= lineWidth && lastSpace == 0) {
+				paragraph = paragraph.substring(0, index)
+					+ "-\n" + paragraph.substring(index, paragraph.length());
+				index += 2;
+				lineIndex = 0;
+			}
+			else if (lineIndex >= lineWidth) {
 				spaces = "";
-				for (int i = 0; i < index - lastSpace; i++) {
+				for (int i = 0; i < (index - lastSpace) / 2; i++) {
 					spaces += " ";
 				}
 				paragraph = paragraph.substring(0,index-lineIndex) + spaces + paragraph.substring(index-lineIndex, lastSpace) + spaces + "\n" + paragraph.substring(lastSpace+1, paragraph.length());
-				index += spaces.length() + 1;
+				index = lastSpace + spaces.length() * 2;
 				lineIndex = 0;
+				lastSpace = 0;
 			}
 
 			lineIndex++;
@@ -250,27 +267,40 @@ public class ProcessFile {
 				lastSpace = index;
 			}
 
-			if (lineIndex >= lineWidth) {
+			// Handle words that are longer than the line maximum
+			if (lineIndex >= lineWidth && lastSpace == 0) {
+				paragraph = paragraph.substring(0, index)
+					+ "-\n" + paragraph.substring(index, paragraph.length());
+				index += 2;
+				lineIndex = 0;
+				lastSpace = 0;
+			}
+			else if (lineIndex >= lineWidth) {
 				spaces = "";
 				for (int i = 0; i < index - lastSpace; i++) {
 					spaces += " ";
 				}
 				if (index - lineIndex == 0) {
 					paragraph = paragraph.substring(0,index-lineIndex) + spaces + paragraph.substring(index-lineIndex, paragraph.length());
+					index += spaces.length();
 				}
 				else {
-					paragraph = paragraph.substring(0,index-lineIndex+1) + "\n" + spaces + paragraph.substring(index-lineIndex+1, paragraph.length());
+					paragraph = paragraph.substring(0,index-lineIndex) + "\n" + spaces + paragraph.substring(index-lineIndex, paragraph.length());
+					index += spaces.length() + 1;
 				}
-				lineIndex = 0;
+				lineIndex = spaces.length();
+				lastSpace = 0;
 			}
 
 			lineIndex++;
 			index++;
 		}
-		for (int i = 0; i < lineWidth - lineIndex; i++) {
-			spaces += " ";
+		if (lastSpace != 0) {
+			for (int i = 0; i < lineWidth - lineIndex - 2; i++) {
+				spaces += " ";
+			}
+			paragraph = paragraph.substring(0,index-lineIndex) + "\n" + spaces + paragraph.substring(index-lineIndex, paragraph.length());
 		}
-		paragraph = paragraph.substring(0,index-lineIndex+1) + "\n" + spaces + paragraph.substring(index-lineIndex+1, paragraph.length());
 
 		return paragraph;
 	}
@@ -288,17 +318,14 @@ public class ProcessFile {
 	// -b flag: Block indent the paragraph
 	private String blockIndent(String paragraph) {
 		// Block indent indents 10 spaces on every line
-		int index = 0;
 		paragraph = "          " + paragraph;
+		int index = 10;
 
-		char current;
 		while (index < paragraph.length()) {
-			current = paragraph.charAt(index);
-			if (current == '\n') {
-				paragraph = paragraph.substring(0, index+1)
-					+ "          "
+			if (paragraph.charAt(index) == '\n') {
+				paragraph = paragraph.substring(0, index+1) + "          "
 					+ paragraph.substring(index+1, paragraph.length());
-				index += 10;
+				index += 11;
 			}
 			index++;
 		}
@@ -320,7 +347,12 @@ public class ProcessFile {
 	private String twoColumn(String paragraph) {
 		int index1;
 		int index2;
-		index1 = paragraph.indexOf(" ", paragraph.length() / 2);
+		if (paragraph.indexOf(" ", paragraph.length() / 2) == -1) {
+			index1 = 0;
+		}
+		else {
+			index1 = paragraph.indexOf(" ", paragraph.length() / 2);
+		}
 		String column1 = paragraph.substring(0, index1);
 		column1 = left(column1);
 		String column2 = paragraph.substring(index1, paragraph.length());
