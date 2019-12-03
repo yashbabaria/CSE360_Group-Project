@@ -49,6 +49,11 @@ public class StartUp extends JFrame {
 			//new TestingApp();
 		});
 		btnPanel.add(btnCreate);
+		JButton btnDetail = new JButton("Flag Functions");
+		btnDetail.addActionListener(e ->{
+			new Instructions();
+		});
+		btnPanel.add(btnDetail);
 		scrollPane.setViewportView(description);
 		// Add elements to the panel
 		panel.add(scrollPane, BorderLayout.PAGE_START);
