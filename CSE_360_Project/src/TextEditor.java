@@ -32,6 +32,15 @@ public class TextEditor extends JFrame {
 		window();
 	}
 
+	// Overload constructor for the text editor
+	// @param textArea, of an existing TextEditor
+	public TextEditor(JTextPane textArea) {
+		proc = new ProcessFile();
+		proc.updateFile(textArea.getText());
+		this.content = proc.returnFile();
+		window();
+	}
+
 	// Text Editing window
 	private void window() {
 		
@@ -61,7 +70,8 @@ public class TextEditor extends JFrame {
 		// Create Buttons
 		JButton btnFormat = new JButton("Format Text");
 		btnFormat.addActionListener(e -> {
-			formatFile(textArea);
+			new TextEditor(textArea);
+			// formatFile(textArea);
 		});
 		btnPanel.add(btnFormat);
 
@@ -99,13 +109,5 @@ public class TextEditor extends JFrame {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	private void formatFile(JTextPane textArea) {
-		// this.content = proc.returnFile();
-		proc.updateFile(textArea.getText());
-		this.content = proc.returnFile();
-		// this.content = "DWAUIDBA";
-		textArea.setText(content);
 	}
 }
