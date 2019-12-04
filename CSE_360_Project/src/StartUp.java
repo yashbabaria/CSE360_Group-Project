@@ -63,6 +63,7 @@ public class StartUp extends JFrame {
 		startWindow.getContentPane().add(panel);
 		startWindow.pack();
 		startWindow.setVisible(true);
+		startWindow.setLocationRelativeTo(null);
 	}
 	
 	
