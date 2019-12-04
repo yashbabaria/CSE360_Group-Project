@@ -24,17 +24,24 @@ public class ProcessFile {
 			String paragraph = "";
 			while ((line = fr.readLine()) != null) {
 				// Process flag file
-				if (line.charAt(0) == '-') {
+				if (line.length() > 0 && line.charAt(0) == '-') {
 					// Apply the formatting for the previous
 					// paragraph
-					this.fileString += formatParagraph(paragraph);
-					// Reset paragraph to empty string
-					paragraph = "";
+					if (paragraph != "") {
+						this.fileString += formatParagraph(paragraph);
+						paragraph = "";
+					}
 
 					// Print the flag line
 					this.fileString += line + "\n";
 					// Get the new flags from the line
 					getFlags(line);
+				}
+				// Empty line
+				else if (line.length() == 0) {
+					this.fileString += formatParagraph(paragraph);
+					paragraph = "";
+
 				}
 				// Add normal line
 				else {
@@ -199,7 +206,7 @@ public class ProcessFile {
 			paragraph = empty(paragraph);
 		}
 
-		return paragraph;
+		return paragraph + "\n";
 	}
 
 	
@@ -244,43 +251,28 @@ public class ProcessFile {
 	private String center(String paragraph) {
 		int index = 0;
 		int lineIndex = 0;
-		
-		// Split up the lines into 80 chars
-		char current;
-		String spaces = "";
 		int lastSpace = 0;
-		while (index < paragraph.length()) {
-			current = paragraph.charAt(index);
+		int i = 0;
+		String spaces = "";
 
-			if (current == ' ') {
-				lastSpace = index;
-			}
-
-			// Handle words that are longer than the line maximum
-			if (lineIndex >= lineWidth && lastSpace == 0) {
-				paragraph = paragraph.substring(0, index)
-					+ "-\n" + paragraph.substring(index, paragraph.length());
-				index += 2;
-				lineIndex = 0;
-			}
-			else if (lineIndex >= lineWidth) {
-				spaces = "";
-				for (int i = 0; i < (index - lastSpace) / 2; i++) {
-					spaces += " ";
+		while (index <= paragraph.length() - lineWidth) {
+			for (lineIndex = 0; lineIndex < lineWidth; lineIndex++) {
+				if (paragraph.charAt(index + lineIndex) == ' ') {
+					lastSpace = index + lineIndex;
 				}
-				paragraph = paragraph.substring(0,index-lineIndex) + spaces + paragraph.substring(index-lineIndex, lastSpace) + spaces + "\n" + paragraph.substring(lastSpace+1, paragraph.length());
-				index = lastSpace + spaces.length() * 2;
-				lineIndex = 0;
-				lastSpace = 0;
+			}
+			for (i = 0, spaces = ""; i < lineWidth - (lastSpace - index); i++) {
+				spaces += " ";
 			}
 
-			lineIndex++;
-			index++;
+			paragraph = paragraph.substring(0, index) + spaces.substring(0, spaces.length() / 2) + paragraph.substring(index, lastSpace) + spaces.substring(spaces.length() / 2, spaces.length()) + "\n" + paragraph.substring(lastSpace, paragraph.length());
+			index = lastSpace + spaces.length() + 1;
 		}
-		for (int i = 0; i < (lineWidth - lineIndex) / 2; i++) {
+		for (i = 0, spaces = ""; i < lineWidth - (paragraph.length() - index); i++) {
 			spaces += " ";
 		}
-		paragraph = paragraph.substring(0,index-lineIndex) + spaces + paragraph.substring(index-lineIndex, paragraph.length()); 
+		paragraph = paragraph.substring(0, index) + spaces.substring(0, spaces.length() / 2) + paragraph.substring(index, paragraph.length()) + spaces.substring(0, spaces.length() / 2);
+		
 
 		return paragraph;
 	}
@@ -289,54 +281,32 @@ public class ProcessFile {
 	private String right(String paragraph) {
 		int index = 0;
 		int lineIndex = 0;
-		
-		char current;
-		String spaces = "";
 		int lastSpace = 0;
-		while (index < paragraph.length()) {
-			current = paragraph.charAt(index);
+		int i = 0;
+		String spaces = "";
 
-			if (current == ' ') {
-				lastSpace = index;
-			}
-
-			// Handle words that are longer than the line maximum
-			if (lineIndex >= lineWidth && lastSpace == 0) {
-				paragraph = paragraph.substring(0, index)
-					+ "-\n" + paragraph.substring(index, paragraph.length());
-				index += 2;
-				lineIndex = 0;
-				lastSpace = 0;
-			}
-			else if (lineIndex >= lineWidth) {
-				spaces = "";
-				for (int i = 0; i < index - lastSpace; i++) {
-					spaces += " ";
+		while (index <= paragraph.length() - lineWidth) {
+			for (lineIndex = 0; lineIndex < lineWidth; lineIndex++) {
+				if (paragraph.charAt(index + lineIndex) == ' ') {
+					lastSpace = index + lineIndex;
 				}
-				if (index - lineIndex == 0) {
-					paragraph = paragraph.substring(0,index-lineIndex) + spaces + paragraph.substring(index-lineIndex, paragraph.length());
-					index += spaces.length();
-				}
-				else {
-					paragraph = paragraph.substring(0,index-lineIndex) + "\n" + spaces + paragraph.substring(index-lineIndex, paragraph.length());
-					index += spaces.length() + 1;
-				}
-				lineIndex = spaces.length();
-				lastSpace = 0;
 			}
-
-			lineIndex++;
-			index++;
-		}
-		if (lastSpace != 0) {
-			for (int i = 0; i < lineWidth - lineIndex - 2; i++) {
+			for (i = 0, spaces = ""; i < lineWidth - (lastSpace - index); i++) {
 				spaces += " ";
 			}
-			paragraph = paragraph.substring(0,index-lineIndex) + "\n" + spaces + paragraph.substring(index-lineIndex, paragraph.length());
+
+			paragraph = paragraph.substring(0, index) + "\n" + spaces + paragraph.substring(index, paragraph.length());
+			index = lastSpace + spaces.length() + 1;
 		}
+		for (i = 0, spaces = ""; i < lineWidth - (paragraph.length() - index); i++) {
+			spaces += " ";
+		}
+		paragraph = paragraph.substring(0, index) + "\n" + spaces + paragraph.substring(index, paragraph.length());
+		
 
 		return paragraph;
 	}
+
 	
 	// -e flag: Add an empty line
 	private String empty(String paragraph) {

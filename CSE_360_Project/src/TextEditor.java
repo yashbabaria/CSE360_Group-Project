@@ -108,7 +108,7 @@ public class TextEditor extends JFrame {
 		scrollPane.setViewportView(textArea);
 		textArea.setText(content);
 		textArea.setFont(new Font("monospaced", Font.PLAIN, 12));
-		textArea.setEditable(false);
+		// textArea.setEditable(false);
 
 		panel.add(scrollPane, BorderLayout.CENTER);
 
