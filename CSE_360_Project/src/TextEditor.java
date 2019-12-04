@@ -13,7 +13,7 @@ import java.awt.Window;
 import javax.swing.*;
 
 public class TextEditor extends JFrame {
-	
+
 	private String content = "";
 	private JFrame initial;
 	private ProcessFile proc;
@@ -23,7 +23,7 @@ public class TextEditor extends JFrame {
 		proc = new ProcessFile();
 		window();
 	}
-	
+
 	// Overload constructor for the text editor
 	// @param file, chosen by the user
 	public TextEditor(File file) {
@@ -43,12 +43,12 @@ public class TextEditor extends JFrame {
 
 	// Text Editing window
 	private void window() {
-		
+
 		// Create Window and set the title to "TextFormat"
 		initial = new JFrame("TextFormat");
-		initial.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//initial.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initial.setResizable(false);
-		
+
 		// Create panel for layout management
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
@@ -66,7 +66,7 @@ public class TextEditor extends JFrame {
 
 		// Button panel
 		JPanel btnPanel = new JPanel();
-		
+
 		// Create Buttons
 		JButton btnFormat = new JButton("Format Text");
 		btnFormat.addActionListener(e -> {
@@ -81,7 +81,7 @@ public class TextEditor extends JFrame {
 		btnPanel.add(btnSaveAs);
 		panel.add(btnPanel, BorderLayout.PAGE_END);
 
-		
+
 		initial.getContentPane().add(panel);
 		initial.pack();
 		initial.setVisible(true);
@@ -90,12 +90,12 @@ public class TextEditor extends JFrame {
 
 	// Window for showing the formatted text
 	private void formattedWindow() {
-		
+
 		// Create Window and set the title to "TextFormat"
 		initial = new JFrame("TextFormat");
-		initial.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//initial.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initial.setResizable(false);
-		
+
 		// Create panel for layout management
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
@@ -114,7 +114,7 @@ public class TextEditor extends JFrame {
 
 		// Button panel
 		JPanel btnPanel = new JPanel();
-		
+
 		JButton btnSaveAs = new JButton("Save As...");
 		btnSaveAs.addActionListener(e -> {
 			saveToFile(textArea, btnSaveAs);
@@ -122,7 +122,7 @@ public class TextEditor extends JFrame {
 		btnPanel.add(btnSaveAs);
 		panel.add(btnPanel, BorderLayout.PAGE_END);
 
-		
+
 		initial.getContentPane().add(panel);
 		initial.pack();
 		initial.setVisible(true);
