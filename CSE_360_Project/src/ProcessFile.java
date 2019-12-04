@@ -39,7 +39,7 @@ public class ProcessFile {
 				}
 				// Empty line
 				else if (line.length() == 0) {
-					this.fileString += formatParagraph(paragraph);
+					this.fileString += formatParagraph(paragraph) + "\n";
 					paragraph = "";
 
 				}
@@ -79,6 +79,11 @@ public class ProcessFile {
 				this.fileString += lines[index] + "\n";
 				// Get the new flags from the line
 				getFlags(lines[index]);
+			}
+			// Empty line
+			else if (line.length() == 0) {
+				this.fileString += formatParagraph(paragraph) + "\n";
+				paragraph = "";
 			}
 			// Add normal line
 			else {
@@ -206,7 +211,7 @@ public class ProcessFile {
 			paragraph = empty(paragraph);
 		}
 
-		return paragraph + "\n";
+		return paragraph;
 	}
 
 	
@@ -255,24 +260,34 @@ public class ProcessFile {
 		int i = 0;
 		String spaces = "";
 
-		while (index <= paragraph.length() - lineWidth) {
-			for (lineIndex = 0; lineIndex < lineWidth; lineIndex++) {
+		while (index < paragraph.length() - lineWidth) {
+			for (lastSpace = -1, lineIndex = 0; lineIndex < lineWidth; lineIndex++) {
 				if (paragraph.charAt(index + lineIndex) == ' ') {
 					lastSpace = index + lineIndex;
 				}
 			}
+
+			// Handle word longer than line
+			if (lastSpace == -1) {
+				return paragraph.substring(0, index) + paragraph.substring(index, index + lineWidth) + "-\n" + center(paragraph.substring(index + lineWidth, paragraph.length()));
+			}
+
 			for (i = 0, spaces = ""; i < lineWidth - (lastSpace - index); i++) {
 				spaces += " ";
 			}
-
-			paragraph = paragraph.substring(0, index) + spaces.substring(0, spaces.length() / 2) + paragraph.substring(index, lastSpace) + spaces.substring(spaces.length() / 2, spaces.length()) + "\n" + paragraph.substring(lastSpace, paragraph.length());
-			index = lastSpace + spaces.length() + 1;
+			if (index == 0) {
+				paragraph = spaces.substring(0, spaces.length() / 2) + paragraph.substring(index, lastSpace) + spaces.substring(spaces.length() / 2, spaces.length()) + "\n" + paragraph.substring(lastSpace, paragraph.length());
+			}
+			else {
+				paragraph = paragraph.substring(0, index) + spaces.substring(0, spaces.length() / 2) + paragraph.substring(index, lastSpace) + spaces.substring(spaces.length() / 2, spaces.length()) + "\n" + paragraph.substring(lastSpace, paragraph.length());
+			}
+			index = lastSpace + spaces.length() + 2;
 		}
+
 		for (i = 0, spaces = ""; i < lineWidth - (paragraph.length() - index); i++) {
 			spaces += " ";
 		}
-		paragraph = paragraph.substring(0, index) + spaces.substring(0, spaces.length() / 2) + paragraph.substring(index, paragraph.length()) + spaces.substring(0, spaces.length() / 2);
-		
+		paragraph = paragraph.substring(0, index) + spaces.substring(0, spaces.length() / 2) + paragraph.substring(index, paragraph.length());
 
 		return paragraph;
 	}
@@ -286,18 +301,30 @@ public class ProcessFile {
 		String spaces = "";
 
 		while (index <= paragraph.length() - lineWidth) {
-			for (lineIndex = 0; lineIndex < lineWidth; lineIndex++) {
+			for (lastSpace = -1, lineIndex = 0; lineIndex < lineWidth; lineIndex++) {
 				if (paragraph.charAt(index + lineIndex) == ' ') {
 					lastSpace = index + lineIndex;
 				}
 			}
+
+			// Handle word longer than line
+			if (lastSpace == -1) {
+				return paragraph.substring(0, index) + "-\n" + paragraph.substring(index, index + lineWidth) + right(paragraph.substring(index + lineWidth, paragraph.length()));
+			}
+
 			for (i = 0, spaces = ""; i < lineWidth - (lastSpace - index); i++) {
 				spaces += " ";
 			}
 
-			paragraph = paragraph.substring(0, index) + "\n" + spaces + paragraph.substring(index, paragraph.length());
+			if (index == 0) {
+				paragraph = spaces + paragraph.substring(index, paragraph.length());
+			}
+			else {
+				paragraph = paragraph.substring(0, index) + "\n" + spaces + paragraph.substring(index, paragraph.length());
+			}
 			index = lastSpace + spaces.length() + 1;
 		}
+
 		for (i = 0, spaces = ""; i < lineWidth - (paragraph.length() - index); i++) {
 			spaces += " ";
 		}
@@ -352,6 +379,11 @@ public class ProcessFile {
 		int index2;
 		if (paragraph.indexOf(" ", paragraph.length() / 2) == -1) {
 			index1 = 0;
+			for (int i = 0; i < paragraph.length(); i++) {
+				if (paragraph.charAt(i) == ' ') {
+					index1 = i;
+				}
+			}
 		}
 		else {
 			index1 = paragraph.indexOf(" ", paragraph.length() / 2);
@@ -381,8 +413,11 @@ public class ProcessFile {
 			newLine2 = column2.indexOf("\n", newLine2+1);
 		}
 
+		for (i = 0, spaces = ""; i + (column1.length() - index1) <= 45; i++) {
+			spaces += " ";
+		}
 		paragraph += column1.substring(index1, column1.length()) + spaces
-			+ column2.substring(index2, column2.length()) + "\n";
+			+ column2.substring(index2, column2.length()); 
 		return paragraph;
 	}
 
