@@ -80,11 +80,6 @@ public class ProcessFile {
 				// Get the new flags from the line
 				getFlags(lines[index]);
 			}
-			// Empty line
-			else if (line.length() == 0) {
-				this.fileString += formatParagraph(paragraph) + "\n";
-				paragraph = "";
-			}
 			// Add normal line
 			else {
 				paragraph += lines[index] + "\n";

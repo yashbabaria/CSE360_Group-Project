@@ -71,7 +71,6 @@ public class TextEditor extends JFrame {
 		JButton btnFormat = new JButton("Format Text");
 		btnFormat.addActionListener(e -> {
 			new TextEditor(textArea);
-			// formatFile(textArea);
 		});
 		btnPanel.add(btnFormat);
 
