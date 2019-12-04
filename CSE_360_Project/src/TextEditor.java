@@ -93,7 +93,7 @@ public class TextEditor extends JFrame {
 		
 		// Create Window and set the title to "TextFormat"
 		initial = new JFrame("TextFormat");
-		initial.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//initial.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initial.setResizable(false);
 		
 		// Create panel for layout management
