@@ -373,8 +373,8 @@ public class ProcessFile {
 		int index1;
 		int index2;
 		if (paragraph.indexOf(" ", paragraph.length() / 2) == -1) {
-			index1 = 0;
-			for (int i = 0; i < paragraph.length(); i++) {
+			index1 = paragraph.length();
+			for (int i = paragraph.length() / 2; i > 0; i--) {
 				if (paragraph.charAt(i) == ' ') {
 					index1 = i;
 				}
